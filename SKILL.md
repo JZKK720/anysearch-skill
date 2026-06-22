@@ -43,7 +43,7 @@ Use these exact command shapes for routine calls. Replace `<cmd>` with the comma
 # Search. Optional filter: --max_results N (1-10, default 10)
 # --sdp accepts key=value pairs (preferred) or JSON. Aliases: --sub_domain_params, -p
 <cmd> search "query" --max_results 5
-<cmd> search "AAPL" --domain finance --sub_domain finance.us_stock --sdp ticker=AAPL
+<cmd> search "AAPL" --domain finance --sub_domain finance.quote --sdp ticker=AAPL
 <cmd> search "latest trends" --domain finance --sub_domain finance.market --sdp region=US,timeframe=2025Q1
 
 # Discover sub-domains. Required before any vertical search.
@@ -51,10 +51,10 @@ Use these exact command shapes for routine calls. Replace `<cmd>` with the comma
 <cmd> get_sub_domains --domains finance,health
 
 # Batch search — shared params apply to all queries (per-query fields override).
-<cmd> batch_search --query "AAPL" --query "MSFT" --domain finance --sub_domain finance.us_stock --sdp ticker=AAPL
-<cmd> batch_search --queries '[{"query":"AAPL","sub_domain_params":"ticker=AAPL"},{"query":"MSFT","sub_domain_params":"ticker=MSFT"}]' --domain finance --sub_domain finance.us_stock
+<cmd> batch_search --query "AAPL" --query "MSFT" --domain finance --sub_domain finance.quote --sdp ticker=AAPL
+<cmd> batch_search --queries '[{"query":"AAPL","sub_domain_params":"ticker=AAPL"},{"query":"MSFT","sub_domain_params":"ticker=MSFT"}]' --domain finance --sub_domain finance.quote
 # Hybrid (mixed domains): omit shared params, specify per-query
-<cmd> batch_search --queries '[{"query":"quantum computing"},{"query":"QBTS","domain":"finance","sub_domain":"finance.us_stock","sub_domain_params":"ticker=QBTS"}]'
+<cmd> batch_search --queries '[{"query":"quantum computing"},{"query":"QBTS","domain":"finance","sub_domain":"finance.quote","sub_domain_params":"ticker=QBTS"}]'
 
 # Extract. Output is already Markdown. Supported args are only the URL positional argument or --url/-u.
 <cmd> extract "https://example.com/page"
