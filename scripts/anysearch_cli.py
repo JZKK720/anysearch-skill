@@ -404,7 +404,7 @@ def build_parser() -> argparse.ArgumentParser:
     )
     search_p.add_argument(
         "--sub_domain_params", "--sdp", "-p",
-        help="Sub_domain parameters as JSON or key=value pairs (e.g. ticker=AAPL,period=2025). Schema depends on the sub_domain (see get_sub_domains output).",
+        help="Sub_domain parameters as JSON or key=value pairs (e.g. type=stock,symbol=AAPL,cn_code=). Schema depends on the sub_domain (see get_sub_domains output).",
     )
     search_p.add_argument(
         "--max_results", "-m",

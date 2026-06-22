@@ -21,7 +21,7 @@ Two modes: general (omit --domain) and vertical (requires --domain + --sub_domai
 | query | string | YES | Search query (positional) |
 | --domain, -d | string | no | Vertical domain: {{DOMAINS_SPACE}} |
 | --sub_domain, -s | string | no | Sub-domain routing key (e.g. finance.quote). REQUIRED for vertical search |
-| --sdp, --sub_domain_params, -p | string | conditional | Extra params per sub_domain schema. Accepts **key=value pairs** (e.g. `ticker=AAPL` or `ticker=AAPL,period=2025Q1`) or JSON. ALL params marked (required) MUST be included, use empty value for inapplicable ones (e.g. `region=`). Omit entirely if no params are listed. |
+| --sdp, --sub_domain_params, -p | string | conditional | Extra params per sub_domain schema. Accepts **key=value pairs** (e.g. `type=stock,symbol=AAPL,cn_code=`) or JSON. ALL params marked (required) MUST be included, use empty value for inapplicable ones (e.g. `cn_code=`). Omit entirely if no params are listed. |
 | --max_results, -m | int | no | 1-10, default 10 |
 
 ### 2. get_sub_domains — Query vertical domain directory
@@ -113,7 +113,7 @@ and strictly obey the returned semantic constraints:
    `--sdp '{"param1":"value","param2":""}'`.
 
 2. **sub_domain selection**: Match the user's intent to the best sub_domain description.
-   Example: for "AAPL earnings report", prefer finance.quote over finance.forex.
+   Example: for "AAPL earnings report", prefer finance.quote (type=stock) over finance.news.
 
 ---
 
@@ -140,7 +140,7 @@ Step 1: Discover available sub_domains for finance:
 Step 2: Search with the correct sub_domain and required params (use empty value for inapplicable ones):
 
 ```bash
-{{LANG_INVOKE}} search "AAPL" --domain finance --sub_domain finance.quote --sdp ticker=AAPL --max_results 5
+{{LANG_INVOKE}} search "AAPL" --domain finance --sub_domain finance.quote --sdp type=stock,symbol=AAPL,cn_code= --max_results 5
 ```
 
 If a param is marked `(required)` but has no meaningful value, pass it with empty value:
@@ -184,19 +184,19 @@ Step 2: Search with the correct sub_domain:
 CLI shorthand with shared domain (`--query` repeatable + shared params):
 
 ```bash
-{{LANG_INVOKE}} batch_search --query "AAPL stock price" --query "TSLA earnings 2025" --query "GOOG market cap" --domain finance --sub_domain finance.quote
+{{LANG_INVOKE}} batch_search --query "AAPL stock price" --query "TSLA earnings 2025" --query "GOOG market cap" --domain finance --sub_domain finance.quote --sdp type=stock,symbol=,cn_code=
 ```
 
 With per-item sub_domain_params as key=value strings:
 
 ```bash
-{{LANG_INVOKE}} batch_search --queries '[{"query":"AAPL","sub_domain_params":"ticker=AAPL"},{"query":"MSFT","sub_domain_params":"ticker=MSFT"}]' --domain finance --sub_domain finance.quote
+{{LANG_INVOKE}} batch_search --queries '[{"query":"AAPL","sub_domain_params":"type=stock,symbol=AAPL,cn_code="},{"query":"MSFT","sub_domain_params":"type=stock,symbol=MSFT,cn_code="}]' --domain finance --sub_domain finance.quote
 ```
 
 Hybrid (mixed domains — no shared params, specify per-query):
 
 ```bash
-{{LANG_INVOKE}} batch_search --queries '[{"query":"quantum computing"},{"query":"QBTS","domain":"finance","sub_domain":"finance.quote","sub_domain_params":"ticker=QBTS"}]'
+{{LANG_INVOKE}} batch_search --queries '[{"query":"quantum computing"},{"query":"QBTS","domain":"finance","sub_domain":"finance.quote","sub_domain_params":"type=stock,symbol=QBTS,cn_code="}]'
 ```
 
 From a JSON file:
